@@ -12,14 +12,11 @@ from dotenv import load_dotenv
 # -----------------------------
 # Load environment variables from .env
 load_dotenv()
-
 api_id = int(os.getenv("API_ID"))
 api_hash = os.getenv("API_HASH")
 phone = os.getenv("PHONE")
-# -----------------------------
 
 client = TelegramClient("session", api_id, api_hash)
-
 # -----------------------------
 # Auto-reply messages
 DAY_REPLIES = [
@@ -97,10 +94,10 @@ async def auto_delete_loop():
 
 # -----------------------------
 async def main():
-    await client.start(phone=phone)
+    # Use lambda to provide phone number without input()
+    await client.start(phone=lambda: phone)
     print("🤖 Ultimate Telegram Auto-Reply Bot running...")
     await asyncio.gather(client.run_until_disconnected(), auto_delete_loop())
-
 # -----------------------------
 with client:
     client.loop.run_until_complete(main())
